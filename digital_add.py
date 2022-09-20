@@ -1,6 +1,6 @@
 import pandas as pd
 
-df_allocation = pd.read_excel(r'C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\Digital - Inflow.xlsx')
+df_allocation = pd.read_excel(r'C:\Users\hrithik.chauhan\Downloads\status_of_invoice_files\status_of_invoice_files\Digital - Inflow.xlsx')
 df_allocation.rename(columns = {'INWARD NO':'Docket No.'}, inplace = True)
 
 print(df_allocation)
@@ -13,7 +13,7 @@ print(df_allocation)
 # df_allocation = pd.read_csv(url_2)
 
 
-df_prev_mis = pd.read_excel(r'C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\test_mis_4july.xlsx')
+df_prev_mis = pd.read_excel(r'C:\Users\hrithik.chauhan\Downloads\status_of_invoice_files\status_of_invoice_files\test_mis_4july.xlsx')
 # new_header = df_prev_mis.iloc[0]
 # df_prev_mis = df_prev_mis[1:]
 # df_prev_mis.columns = new_header
@@ -33,7 +33,7 @@ for i in range(0,len(vlookup_common)):
 l = []
 
 # df_allocation_2 = pd.read_csv(url_2)
-df_allocation_2 = pd.read_excel(r'C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\Digital - Inflow.xlsx')
+df_allocation_2 = pd.read_excel(r'C:\Users\hrithik.chauhan\Downloads\status_of_invoice_files\status_of_invoice_files\Digital - Inflow.xlsx')
 df_allocation_2.rename(columns = {'INWARD NO':'Docket No.'}, inplace = True)
 for i in range(0,len(df_allocation_2['Docket No.'])):
   if df_allocation_2['Docket No.'][i] in myset:
@@ -41,7 +41,7 @@ for i in range(0,len(df_allocation_2['Docket No.'])):
 for i in l:
  df_allocation_2.drop(i, inplace = True)
 
-df_allocation_2.to_excel(r'C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\digital.xlsx')
+df_allocation_2.to_excel(r'C:\Users\hrithik.chauhan\Downloads\status_of_invoice_files\status_of_invoice_files\digital.xlsx')
 
 print(df_allocation_2)
 

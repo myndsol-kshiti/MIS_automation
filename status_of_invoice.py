@@ -1,34 +1,27 @@
 import pandas as pd
 from datetime import datetime,date
-# import sys
-# sys.stdout = open(r'C:\Users\kshiti.sinha\PycharmProjects\codes_MIS\console_data', 'w')
 
-#load all files
-#mis
 now1 = datetime.now()
 print("starting time:",datetime.now())
-# time_df = pd.DataFrame(columns='Time Check')
-# time_df['Time Stamp'] = datetime.now()
-old_mis = pd.read_excel(r"C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\status_of_invoice_files\data (8).xlsx")
-# new_header = old_mis.iloc[0]
-# old_mis = old_mis[1:]
-# old_mis.columns = new_header
+
+old_mis = pd.read_excel(r"C:\Users\hrithik.chauhan\Downloads\status_of_invoice_files\status_of_invoice_files\data (8).xlsx")
+
 mis_docket = set(old_mis['Docket No.'])
 mis_invoice_num = set(old_mis['Invoice No.'])
 print("old mis loaded",len(old_mis))
 #phd combined
-phd = pd.read_excel(r'C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\Comp.-5Jul DONE.xlsb', engine='pyxlsb')
+phd = pd.read_excel(r'C:\Users\hrithik.chauhan\Downloads\status_of_invoice_files\status_of_invoice_files\Comp.-5Jul DONE.xlsb', engine='pyxlsb')
 phd.rename(columns = {'Inward No':'Docket No.'}, inplace = True)
 print("phd loaded",len(phd))
 #ssc batch
-ssc_batch = pd.read_excel(r'C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\status_of_invoice_files\SSC Batch.xlsx')
-ssc_batch_rejection = pd.read_excel(r'C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\status_of_invoice_files\Rejection Batch.xlsx')
-ssc_batch_isupplier = pd.read_excel(r'C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\status_of_invoice_files\Isupplier Batch.xlsx')
+ssc_batch = pd.read_excel(r"C:\Users\hrithik.chauhan\Downloads\status_of_invoice_files\status_of_invoice_files\SSC Batch.xlsx")
+ssc_batch_rejection = pd.read_excel(r'C:\Users\hrithik.chauhan\Downloads\status_of_invoice_files\status_of_invoice_files\Rejection Batch.xlsx')
+ssc_batch_isupplier = pd.read_excel(r'C:\Users\hrithik.chauhan\Downloads\status_of_invoice_files\status_of_invoice_files\Isupplier Batch.xlsx')
 print("ssc batch loaded",len(ssc_batch))
 # #eb-gst batch
-eb_gst_batch = pd.read_excel(r'C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\status_of_invoice_files\EB_GST.xlsx',sheet_name='SSC Batch')
-eb_gst_rejection = pd.read_excel(r'C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\status_of_invoice_files\EB_GST.xlsx',sheet_name='SSC Rejection')
-eb_gst_hold = pd.read_excel(r'C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\status_of_invoice_files\EB_GST.xlsx',sheet_name='OTC Hold Data')
+eb_gst_batch = pd.read_excel(r'C:\Users\hrithik.chauhan\Downloads\status_of_invoice_files\status_of_invoice_files\EB_GST.xlsx',sheet_name='SSC Batch')
+eb_gst_rejection = pd.read_excel(r'C:\Users\hrithik.chauhan\Downloads\status_of_invoice_files\status_of_invoice_files\EB_GST.xlsx',sheet_name='SSC Rejection')
+eb_gst_hold = pd.read_excel(r'C:\Users\hrithik.chauhan\Downloads\status_of_invoice_files\status_of_invoice_files\EB_GST.xlsx',sheet_name='OTC Hold Data')
 print("eb gst batch loaded",len(eb_gst_batch))
 #
 # #eb-gst-mis
@@ -41,35 +34,35 @@ print("eb gst batch loaded",len(eb_gst_batch))
 # # i_expense_docket = set()
 # # print("i expense loaded")
 # #eastern mis
-eastern_mis = pd.read_excel(r"C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\status_of_invoice_files\EASTERN MIS_5-JUL-22.xlsb",sheet_name='Data',engine='pyxlsb')
+eastern_mis = pd.read_excel(r"C:\Users\hrithik.chauhan\Downloads\status_of_invoice_files\status_of_invoice_files\EASTERN MIS_5-JUL-22.xlsb",sheet_name='Data',engine='pyxlsb')
 new_header1 = eastern_mis.iloc[0]
 eastern_mis = eastern_mis[1:]
 eastern_mis.columns = new_header1
 print("eastern mis loaded",len(eastern_mis))
 #
 # #grn_done
-grn_done = pd.read_excel(r'C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\status_of_invoice_files\GRN DONE 6 JUL 22.xlsx',sheet_name='GRN DATA')
+grn_done = pd.read_excel(r'C:\Users\hrithik.chauhan\Downloads\status_of_invoice_files\status_of_invoice_files\GRN DONE 6 JUL 22.xlsx',sheet_name='GRN DATA')
 print("grn done loaded",len(grn_done))
 #
 # #asn_file
-asn = pd.read_excel(r'C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\status_of_invoice_files\ASN-6 JUl.xlsb',engine='pyxlsb')
+asn = pd.read_excel(r'C:\Users\hrithik.chauhan\Downloads\status_of_invoice_files\status_of_invoice_files\ASN-6 JUl.xlsb',engine='pyxlsb')
 print("asn loaded")
 # #open invoice report
-open_invoice = pd.read_excel(r'C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\status_of_invoice_files\Open Invoice Report(05-07-2022)_AUTOMATION REPORT.xlsx')
+open_invoice = pd.read_excel(r'C:\Users\hrithik.chauhan\Downloads\status_of_invoice_files\status_of_invoice_files\Open Invoice Report(05-07-2022)_AUTOMATION REPORT.xlsx')
 new_header2 = open_invoice.iloc[0]
 open_invoice = open_invoice[1:]
 open_invoice.columns = new_header2
 print("open invoice loaded",len(open_invoice))
 
 # #ssc mis combined
-ssc_mis_combined = pd.read_excel(r'C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\status_of_invoice_files\SSC MIS Tracker 05-Jul-2022.xlsb',sheet_name='DATA',engine='pyxlsb')
+ssc_mis_combined = pd.read_excel(r'C:\Users\hrithik.chauhan\Downloads\status_of_invoice_files\status_of_invoice_files\SSC MIS Tracker 05-Jul-2022.xlsb',sheet_name='DATA',engine='pyxlsb')
 print("ssc mis combined loaded",len(ssc_mis_combined))
 
 #car report
-car = pd.read_excel(r'C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\status_of_invoice_files\CAR Report 06 Jul.xlsx')
+car = pd.read_excel(r'C:\Users\hrithik.chauhan\Downloads\status_of_invoice_files\status_of_invoice_files\CAR Report 06 Jul.xlsx')
 print("car report loaded",len(car))
 
-paid = pd.read_excel(r'C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\status_of_invoice_files\Paid Report.xlsx')
+paid = pd.read_excel(r'C:\Users\hrithik.chauhan\Downloads\status_of_invoice_files\status_of_invoice_files\Paid Report.xlsx')
 print("paid file loaded",len(paid))
 
 print("LOADED ALL FILES")
@@ -172,7 +165,7 @@ mis_asn_docket = list(mis_asn_docket)
 #asn-status-docket
 mis_asn2 = asn[asn['ASN Number'].isin(mis_asn_invoice)]
 list_asn_status_scm = ['0','APPROVED','#N/A']
-list_asn_status_user1=['APPROVAL PENDING']
+list_asn_status_user1 = ['APPROVAL PENDING']
 list_asn_status_user2 = ['CANCELLED']
 asn_scm = mis_asn2[mis_asn2['ASN Status'].isin(list_asn_status_scm)]
 asn_scm_doc = set(asn_scm['ASN Number'])
@@ -214,7 +207,7 @@ ssc_status_val_docket = set(ssc_status_validated['Docket No.'])
 
 #
 #
-master = pd.read_excel(r'C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\status_of_invoice_files\data (8).xlsx')
+master = pd.read_excel(r'C:\Users\hrithik.chauhan\Downloads\status_of_invoice_files\status_of_invoice_files\data (8).xlsx')
 # new_header = master.iloc[0]
 # master = master[1:]
 # master.columns = new_header
@@ -361,7 +354,7 @@ car_mis_oracle = set(car_mis['Oracle Invoice ID'])
 car_mis_docket = car_mis_document.union(car_mis_oracle)
 car_mis_docket = list(car_mis_docket)
 
-creditor_status = ['NA']
+creditor_status = ['NA', "", "#NA"]
 creditor_mis = old_mis[old_mis['Docket No.'].isin(car_mis_docket)]
 car_mis = creditor_mis = old_mis[old_mis['Creditor Status of Invoice'].isin(creditor_status)]
 car_invoice = set(car['Invoice Number'])
@@ -397,7 +390,7 @@ car_status_docket2 = set(filter2['Docket No.'])
 print("car validation step 2")
 car_status_cr = ['Validated']
 stat_of_inv = ['Due for Payment','Not Due for Payment','Validated']
-car3 = car[car['Creditor Status of Invoice'].isin(car_status_cr)]
+car3 = car[car['Status Of Invoice'].isin(car_status_cr)]
 master3 = master[master['Status of Invoice'].isin(stat_of_inv)]
 car3set = set(car3['Document ID'])
 car3set_oracle = set(car3['Oracle Invoice ID'])
@@ -495,11 +488,5 @@ print("all status updateddddd!!!!!")
 
 master.to_excel('status_of_invoice_updated3.xlsx')
 # sys.stdout.close()
-
-
-
-
-
-
 
 

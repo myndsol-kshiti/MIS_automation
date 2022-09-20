@@ -13,7 +13,7 @@ print(df_allocation)
 # df_allocation = pd.read_csv(url_2)
 
 
-df_prev_mis = pd.read_excel(r'C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\I-Supplier - Inflow.xlsx')
+df_prev_mis = pd.read_excel(r'C:\Users\hrithik.chauhan\Downloads\status_of_invoice_files\status_of_invoice_files\I-Supplier - Inflow.xlsx')
 df_allocation.rename(columns = {'INWARD NO':'Docket No.'}, inplace = True)
 # new_header = df_prev_mis.iloc[0]
 # df_prev_mis = df_prev_mis[1:]
@@ -42,7 +42,7 @@ for i in range(0,len(df_allocation_2['Docket No.'])):
 for i in l:
  df_allocation_2.drop(i, inplace = True)
 
-df_allocation_2.to_excel(r'C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\digital.xlsx')
+df_allocation_2.to_excel(r'C:\Users\hrithik.chauhan\Downloads\status_of_invoice_files\status_of_invoice_files\digital.xlsx')
 
 print(df_allocation_2)
 print(len(df_allocation_2))
