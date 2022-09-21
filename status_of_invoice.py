@@ -346,7 +346,51 @@ for i in range(0,len(master)):
          master.loc[i, 'Reason of Rejection/Hold'] =  'Validated'
 
 print("ssc combined time:",datetime.now())
+creditor_status = ['NA','',"#NA"]
+############################################################################################
+#try paid above
+#
+# paid_inward = set(paid['Inward No'])
+# paid_mis_docket = mis_docket.intersection(paid_inward)
+# for i in range(0,len(master)):
+#     print("paid due date erp", master['Docket No.'][i])
+#     if master['Docket No.'][i] in paid_mis_docket:
+#         if master['Due Date ERP'][i] <= date_today:
+#             master.loc[i, 'Status of Invoice'] =  'Due for Payment'
+#             master.loc[i, 'Reason of Rejection/Hold'] =  'Due for Payment'
+#         elif master['Due Date ERP'][i] > date_today:
+#             master.loc[i, 'Status of Invoice'] =  'Not Due for Payment'
+#             master.loc[i, 'Reason of Rejection/Hold'] =  'Not Due for Payment'
+# for i in range(0, len(master)):
+#     print("paid payment hold", master['Docket No.'][i])
+#     if master['Docket No.'][i] in paid_mis_docket:
+#         if master['Payment Hold Flag'][i] == "Yes":
+#             master.loc[i, 'Status of Invoice'] =  'Hold by Backend/Circle Hold'
+# print("car paid check :",datetime.now())
+#
+# paid_mis_docket = list(paid_mis_docket)
+# mis_paid = master[master['Docket No.'].isin(paid_mis_docket)]
+# status_mis = ['Due for Payment','Not Due for Payment','Hold by Backend/Circle Hold']
+# mis_paid2 = mis_paid[mis_paid['Status of Invoice'].isin(status_mis)]
+# mis_paid3 = mis_paid2[mis_paid2['Creditor Status of Invoice'].isin(creditor_status)]
+# print(mis_paid3)
+# paid_clearance = set(mis_paid3['Docket No.'])
+#
+# for i in range(0, len(master)):
+#     print("paid payment hold paid under clearance", master['Docket No.'][i])
+#     if master['Docket No.'][i] in paid_clearance:
+#             master.loc[i, 'Status of Invoice'] =  'Paid Under Clearance'
+#
+# print("paid under clearance updated :",datetime.now())
+#
+# now2 = datetime.now()
+# print("start time:",now1)
+# print("end time:",now2)
+# print("all status updateddddd!!!!!")
 
+
+#try end
+#################################################################################################
 car_docket = set(car['Document ID'])
 car_oracle = set(car['Oracle Invoice ID'])
 car_val = car_docket.union(car_oracle)
@@ -361,7 +405,7 @@ car_mis_oracle = set(car_mis['Oracle Invoice ID'])
 car_mis_docket = car_mis_document.union(car_mis_oracle)
 car_mis_docket = list(car_mis_docket)
 
-creditor_status = ['NA']
+# creditor_status = ['NA','',"#NA"]
 creditor_mis = old_mis[old_mis['Docket No.'].isin(car_mis_docket)]
 car_mis = creditor_mis = old_mis[old_mis['Creditor Status of Invoice'].isin(creditor_status)]
 car_invoice = set(car['Invoice Number'])
@@ -455,6 +499,7 @@ for i in range(0, len(master)):
 
 print("car done")
 print("car completion time:",datetime.now())
+#####################################################################################
 paid_inward = set(paid['Inward No'])
 paid_mis_docket = mis_docket.intersection(paid_inward)
 for i in range(0,len(master)):
@@ -492,7 +537,7 @@ now2 = datetime.now()
 print("start time:",now1)
 print("end time:",now2)
 print("all status updateddddd!!!!!")
-
+#####################################################################################################
 master.to_excel('status_of_invoice_updated3.xlsx')
 # sys.stdout.close()
 
