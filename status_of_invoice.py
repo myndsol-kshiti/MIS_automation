@@ -9,13 +9,15 @@ now1 = datetime.now()
 print("starting time:",datetime.now())
 # time_df = pd.DataFrame(columns='Time Check')
 # time_df['Time Stamp'] = datetime.now()
-old_mis = pd.read_excel(r"C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\status_of_invoice_files\data (8).xlsx")
+old_mis = pd.read_excel(r"C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\status_of_invoice_files\data (6).xlsx",sheet_name='Export')
+print("old mis loaded",len(old_mis))
 # new_header = old_mis.iloc[0]
 # old_mis = old_mis[1:]
 # old_mis.columns = new_header
+# prev_day_mis = pd.read_excel(r"C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\status_of_invoice_files\test_mis_4july.xlsx")
 mis_docket = set(old_mis['Docket No.'])
 mis_invoice_num = set(old_mis['Invoice No.'])
-print("old mis loaded",len(old_mis))
+# print("prev day mis loaded",len(prev_day_mis))
 #phd combined
 phd = pd.read_excel(r'C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\Comp.-5Jul DONE.xlsb', engine='pyxlsb')
 phd.rename(columns = {'Inward No':'Docket No.'}, inplace = True)
@@ -214,11 +216,30 @@ ssc_status_val_docket = set(ssc_status_validated['Docket No.'])
 
 #
 #
-master = pd.read_excel(r'C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\status_of_invoice_files\data (8).xlsx')
+master = pd.read_excel(r'C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\status_of_invoice_files\data (6).xlsx')
+len_doc = len(master['Docket No.'])
+# prev_day_mis_set = set(prev_day_mis['Docket No.'])
+# prev_day_mis_docket = prev_day_mis_set.intersection(mis_docket)
+# print(len(prev_day_mis_docket))
+# for i in range(1,len_doc):
+#     #prev_day_status loop
+#     print("prev mis status",master['Docket No.'][i])
+#     if master['Docket No.'][i] in prev_day_mis_docket:
+#         status_of_invoice = pd.DataFrame()
+#         stat_list = []
+#         stat_list.append(master['Docket No.'][i])
+#         print(stat_list)
+#         status_of_invoice = prev_day_mis[prev_day_mis['Docket No.'].isin(stat_list)]
+#         print(status_of_invoice)
+#         status_of_invoice.drop_duplicates()
+#         stat = status_of_invoice['Status of Invoice'].to_list()
+#         print(stat[0])
+#         master.loc[i, 'Status of Invoice'] = stat[0]
+# master.to_excel('prev_day_status.xlsx')
+
 # new_header = master.iloc[0]
 # master = master[1:]
 # master.columns = new_header
-len_doc = len(master['Docket No.'])
 print(len_doc)
 for i in range(1,len_doc):
     #phd competency loop
@@ -308,7 +329,7 @@ for i in range(0,len(master)):
         master.loc[i, 'Reason of Rejection/Hold'] =  'WIP for Header'
 print("grn done time:",datetime.now())
 
-#asn-mis
+# #asn-mis
 for i in range(0,len(master)):
      print("asn mis", master['Docket No.'][i])
      if master['Docket No.'][i] in asn_scm_doc:
@@ -352,7 +373,7 @@ car_oracle = set(car['Oracle Invoice ID'])
 car_val = car_docket.union(car_oracle)
 mis_car_docket = mis_docket.intersection(car_val)
 print("mis_car_docket len",len(mis_car_docket))
-mis_car_docket = list(mis_car_docket)
+# mis_car_docket = list(mis_car_docket)
 car_common_mis = car[car['Document ID'].isin(mis_car_docket)]
 car_common_mis2 = car[car['Oracle Invoice ID'].isin(mis_car_docket)]
 car_mis = pd.concat([car_common_mis, car_common_mis2]).drop_duplicates()
@@ -360,15 +381,15 @@ car_mis_document = set(car_mis['Document ID'])
 car_mis_oracle = set(car_mis['Oracle Invoice ID'])
 car_mis_docket = car_mis_document.union(car_mis_oracle)
 car_mis_docket = list(car_mis_docket)
-
+creditor_mis = car[car['Document ID'].isin(mis_car_docket)]
+creditor_mis2 = car[car['Oracle Invoice ID'].isin(mis_car_docket)]
 creditor_status = ['NA']
-creditor_mis = old_mis[old_mis['Docket No.'].isin(car_mis_docket)]
-car_mis = creditor_mis = old_mis[old_mis['Creditor Status of Invoice'].isin(creditor_status)]
+car_mis = car[car['Status of Invoice'].isin(creditor_status)]
 car_invoice = set(car['Invoice Number'])
 mis_car_invoice = mis_invoice_num.intersection(car_invoice)
 mis_car_invoice = list(mis_car_invoice)
 car_mis2 = car_mis[car_mis['Invoice No.'].isin(mis_car_invoice)]
-creditor_mis_invoice = car_mis2[car_mis2['Creditor Status of Invoice'].isin(creditor_status)]
+creditor_mis_invoice = car_mis2[car_mis2['Status of Invoice'].isin(creditor_status)]
 car['combo'] = str(car['Circle'])+ str(car['Vendor Code']) + str(car['Invoice Number'])
 car_combo_docket = set(car['combo'])
 mis_car_combo = mis_docket.intersection(car_combo_docket)
@@ -397,12 +418,12 @@ car_status_docket2 = set(filter2['Docket No.'])
 print("car validation step 2")
 car_status_cr = ['Validated']
 stat_of_inv = ['Due for Payment','Not Due for Payment','Validated']
-car3 = car[car['Creditor Status of Invoice'].isin(car_status_cr)]
-master3 = master[master['Status of Invoice'].isin(stat_of_inv)]
-car3set = set(car3['Document ID'])
-car3set_oracle = set(car3['Oracle Invoice ID'])
-car3set_union = car3set.union(car3set_oracle)
-car_due_not_due = mis_docket.intersection(car3set_union)
+car3 = master[master['Creditor Status of Invoice'].isin(car_status_cr)]
+master3 = car3[car3['Status of Invoice'].isin(stat_of_inv)]
+car3set = set(car3['Docket No.'])
+# car3set_oracle = set(car3['Oracle Invoice ID'])
+# car3set_union = car3set.union(car3set_oracle)
+car_due_not_due = mis_docket.intersection(car3set)
 
 
 for i in range(0,len(master)):
@@ -412,7 +433,7 @@ for i in range(0,len(master)):
         master.loc[i, 'Reason of Rejection/Hold'] =  'WIP for Header'
 print("car step two time:",datetime.now())
 # date_today = date.today()
-master.to_excel('status_of_invoice_updatedwithcar.xlsx')
+# master.to_excel('status_of_invoice_updatedwithcar.xlsx')
 
 date_today = date(2022, 7, 5)
 print(date_today)
@@ -475,9 +496,9 @@ print("car paid check :",datetime.now())
 
 paid_mis_docket = list(paid_mis_docket)
 mis_paid = master[master['Docket No.'].isin(paid_mis_docket)]
-status_mis = ['Due for Payment','Not Due for Payment','Hold by Backend/Circle Hold']
-mis_paid2 = mis_paid[mis_paid['Status of Invoice'].isin(status_mis)]
-mis_paid3 = mis_paid2[mis_paid2['Creditor Status of Invoice'].isin(creditor_status)]
+# status_mis = ['Due for Payment','Not Due for Payment','Hold by Backend/Circle Hold']
+# mis_paid2 = mis_paid[mis_paid['Status of Invoice'].isin(status_mis)]
+mis_paid3 = mis_paid[mis_paid['Creditor Status of Invoice'].isin(creditor_status)]
 print(mis_paid3)
 paid_clearance = set(mis_paid3['Docket No.'])
 
