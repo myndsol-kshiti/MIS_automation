@@ -1,7 +1,13 @@
+import sys
+
 import pandas as pd
 from datetime import datetime,date
 # import sys
 # sys.stdout = open(r'C:\Users\kshiti.sinha\PycharmProjects\codes_MIS\console_data', 'w')
+import datetime
+import smtplib
+from email.message import EmailMessage
+from datetime import date,datetime
 
 #load all files
 #mis
@@ -9,7 +15,7 @@ now1 = datetime.now()
 print("starting time:",datetime.now())
 # time_df = pd.DataFrame(columns='Time Check')
 # time_df['Time Stamp'] = datetime.now()
-old_mis = pd.read_excel(r"C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\status_of_invoice_files\data (19).xlsx",sheet_name='Export')
+old_mis = pd.read_excel(r"C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\status_of_invoice_files\data (22).xlsx",sheet_name='Export')
 print("old mis loaded",len(old_mis))
 # new_header = old_mis.iloc[0]
 # old_mis = old_mis[1:]
@@ -150,7 +156,8 @@ print("eb gst and mis common",len(eb_gst_batch))
 eastern_docket = set(eastern_mis['Docket No.'])
 eastern_mis_docket = mis_docket.intersection(eastern_docket)
 eastern_mis_docket = list(eastern_mis_docket)
-
+print(len(eastern_mis_docket))
+sys.exit()
 eastern_mis_columns = eastern_mis[eastern_mis['Docket No.'].isin(eastern_mis_docket)]
 print(len(eastern_mis_columns))
 old_mis_for_eastern = old_mis[old_mis['Docket No.'].isin(eastern_mis_docket)]
@@ -217,7 +224,7 @@ ssc_status_val_docket = set(ssc_status_validated['Docket No.'])
 
 #
 #
-master = pd.read_excel(r"C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\status_of_invoice_files\data (19).xlsx",sheet_name='Export')
+master = pd.read_excel(r"C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\status_of_invoice_files\data (22).xlsx",sheet_name='Export')
 # new_header = master.iloc[0]
 # master = master[1:]
 # master.columns = new_header
@@ -234,10 +241,10 @@ for i in range(1,len_doc):
         master.loc[i, 'Reason of Rejection/Hold'] =  "Rejected to Partner"
     elif master['Docket No.'][i] in set_scm:
         master.loc[i, 'Status of Invoice'] =  "Pending with SCM"
-        master.loc[i, 'Reason of Rejection/Hold'] =  "Pending with GRN"
+        master.loc[i, 'Reason of Rejection/Hold'] =  "Pending for GRN"
     elif master['Docket No.'][i] in set_user:
         master.loc[i, 'Status of Invoice'] =  "Pending with User"
-        master.loc[i, 'Reason of Rejection/Hold'] =  "Pending with GRN"
+        master.loc[i, 'Reason of Rejection/Hold'] =  "Pending for GRN"
 
 print("phd competency time:",datetime.now())
 
@@ -286,7 +293,7 @@ for i in range(1, len_doc):
             # remark1 = list(remark.keys())[0]
             # print(remark1)
             master.loc[i, 'Status of Invoice'] = stat[0]
-            master.loc[i, 'Reason of Rejection/Hold'] = reason[0]
+            # master.loc[i, 'Reason of Rejection/Hold'] = reason[0]
             master.loc[i, 'Current Stage'] = remark[0]
 
 print("eastern mis time:",datetime.now())
@@ -316,6 +323,17 @@ for i in range(0,len(master)):
      print("asn mis", master['Docket No.'][i])
      if master['Docket No.'][i] in asn_scm_doc:
          master.loc[i, 'Status of Invoice'] =  'Pending with SCM'
+         sc_reason = pd.DataFrame()
+         check_list2 = []
+         check_list2.append(master['Docket No.'][i])
+         print(check_list2)
+         ssc_reason = ssc_mis_combined[ssc_mis_combined['Docket No.'].isin(check_list2)]
+         # mid_eastern.to_excel('mid_eastern.xlsx')
+         print(ssc_mis_combined)
+         ssc_mis_combined.drop_duplicates()
+         reason_ssc = mid_eastern['Reason of Rejection/Hold'].to_list()
+         print(reason_ssc[0])
+         master.loc[i, 'Reason of Rejection/Hold'] = reason_ssc[0]
          master.loc[i, 'Reason of Rejection/Hold'] =  'Pending with GRN'
      elif master['Docket No.'][i] in asn_user1:
          master.loc[i, 'Status of Invoice'] =  'Pending with User'
@@ -330,22 +348,23 @@ for i in range(0,len(master)):
      print("open invoice report", master['Docket No.'][i])
      if master['Docket No.'][i] in open_phd_doc:
          master.loc[i, 'Status of Invoice'] =  'Rejected to Partner'
+         #add reason of rejection here
          master.loc[i, 'Reason of Rejection/Hold'] =  'Rejected to Partner'
      elif master['Docket No.'][i] in open_ssc_doc:
          master.loc[i, 'Status of Invoice'] =  'Pending with SSC'
          master.loc[i, 'Reason of Rejection/Hold'] =  'Ready for SSC'
 print("open invoice time :",datetime.now())
 #ssc combined update
-# for i in range(0,len(master)):
-#      print("ssc combined", master['Docket No.'][i])
-#      if master['Docket No.'][i] in ssc_status_hold_docket:
-#          master.loc[i, 'Status of Invoice'] =  'Hold at SSC'
-#          master.loc[i, 'Reason of Rejection/Hold'] =  'Balance Confirmation Hold'
-#      elif master['Docket No.'][i] in ssc_status_pending_docket:
-#          master.loc[i, 'Status of Invoice'] =  'Pending with SSC'
-#          master.loc[i, 'Reason of Rejection/Hold'] =  'WIP for Header'
-#      elif master['Docket No.'][i] in ssc_status_val_docket:
-#          master.loc[i, 'Status of Invoice'] =  'Validated'
+for i in range(0,len(master)):
+     print("ssc combined", master['Docket No.'][i])
+     if master['Docket No.'][i] in ssc_status_hold_docket:
+         master.loc[i, 'Status of Invoice'] =  'Hold at SSC'
+         master.loc[i, 'Reason of Rejection/Hold'] =  'Balance Confirmation Hold'
+     elif master['Docket No.'][i] in ssc_status_pending_docket:
+         master.loc[i, 'Status of Invoice'] =  'Pending with SSC'
+         master.loc[i, 'Reason of Rejection/Hold'] =  'WIP for Processing'
+     elif master['Docket No.'][i] in ssc_status_val_docket:
+         master.loc[i, 'Status of Invoice'] =  'Hold at SSC'
 # for i in range(0,len(master)):
 #      print("ssc combined", master['Docket No.'][i])
 #     if master['Docket No.'][i] in ssc_status_hold_docket:
@@ -368,14 +387,14 @@ for i in range(0,len(master)):
          master.loc[i, 'Reason of Rejection/Hold'] = reason_ssc[0]
      elif master['Docket No.'][i] in ssc_status_pending_docket:
          master.loc[i, 'Status of Invoice'] =  'Pending with SSC'
-         master.loc[i, 'Reason of Rejection/Hold'] =  'WIP for Header'
+         master.loc[i, 'Reason of Rejection/Hold'] =  'WIP for Processing'
      elif master['Docket No.'][i] in ssc_status_val_docket:
          master.loc[i, 'Status of Invoice'] =  'Validated'
          master.loc[i, 'Reason of Rejection/Hold'] =  'Validated'
 
 for i in range(0,len(master)):
      print("ssc combined balance confirmation", master['Docket No.'][i])
-     if master['Reason of Rejection/Hold Final'][i] == "Balance confirmation":
+     if master['Reason of Rejection/Hold'][i] == "Balance confirmation":
          master.loc[i, 'Status of Invoice'] =  "Balance confirmation Hold"
 
 
@@ -590,12 +609,39 @@ print("start time:",now1)
 print("end time:",now2)
 print("all status updateddddd!!!!!")
 #####################################################################################################
-master.to_excel('status_of_invoice_updated6.xlsx')
+master.to_excel(r"C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\MIS DATA\OUTPUTS\status output\status_of_invoice_updatedlatest.xlsx")
 # sys.stdout.close()
 
 
 print("hogya biro dekhlo fatafat")
 
+SENDER_EMAIL = "kshiti.sinha@myndsol.com"
+APP_PASSWORD = "1@Million"
+date_today = datetime.date
+
+excel_file=r"C:\Users\kshiti.sinha\Desktop\projects\MIS TRACKER\MIS DATA\OUTPUTS\status output\status_of_invoice_updated6.xlsx"
+subject = "MIS DATA"
+recipient_email = "analytics@myndsol.com"
+
+# def send_mail_with_excel():
+#     msg = EmailMessage()
+#     msg['Subject'] = 'MIS DATA'
+#     msg['From'] = SENDER_EMAIL
+#     msg['To'] = "analytics@myndsol.com"
+#
+#
+#     with open(excel_file, 'rb') as f:
+#         file_data = f.read()
+#     msg.add_attachment(file_data, maintype="application", subtype="xlsx", filename='MIS DATA')
+#
+#     with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
+#         smtp.login(SENDER_EMAIL, APP_PASSWORD)
+#         smtp.send_message(msg)
+#
+# send_mail_with_excel()
+#
+# #send email
+#
 
 
 
